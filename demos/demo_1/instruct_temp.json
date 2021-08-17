@@ -1,0 +1,16 @@
+{
+    "data_source":"local_data",
+    "redcap":
+    {
+        "api_key":"",
+        "url_address":""
+    },
+    "local_data":
+    {
+        "data_file_str":"../demos/demo_1/mice_data.xlsx"
+    },
+    
+    "projected_data":"../demos/demo_1/proj_mice_data.xlsx",
+    "animals_to_pick":[502,504],
+    "frequency_in_days": 21
+}
