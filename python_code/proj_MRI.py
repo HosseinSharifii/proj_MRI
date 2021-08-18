@@ -7,6 +7,7 @@ Created on Mon Aug 16 21:34:31 2021
 import os 
 import json
 import sys 
+import calendar as cal
 
 import pandas as pd
 import numpy as np 
@@ -101,10 +102,37 @@ def project_MRI_scanning(data_str = "",
                 sliced_data.append(df.loc[df['animals_ID'] == ad])
     else:
         sliced_data = df
+
+    #build the counter for calander
+
+    # first build up arrays for months, name of weekdays, and determine
+    # the indicies of scan days starting from 0 for Monday
+    months = np.array(cal.month_name)
+    weekdays = np.array(cal.day_abbr)
+    if not 'scan_days' in instruction:
+        instruction['scan_days'] = weekdays[0:4]
+    sd_index = np.zeros(len(instruction['scan_days']))
+    for i,sd in enumerate(instruction['scan_days']):
+        index, = np.where(weekdays == sd)[0]
+        sd_index[i] = index
+  
+    # now generate counter for the calendar
+    cal_count_dict = dict()
+    for i,m in enumerate(months[1:13]):
+        print((i,m))
+        n_of_weeks = len(cal.monthcalendar(2021,i+1))
+        cal_count_dict[m]=np.zeros((n_of_weeks,7))
         
+        for w in np.arange(len(cal_count_dict[m])):
+            for d in np.arange(len(cal_count_dict[m][w])):
+                if d in sd_index and cal.monthcalendar(2021,i+1)[w][d]!=0:
+                    cal_count_dict[m][w][d] = instruction['max_animals_per_day']
+        
+
+
     #start checking when was the last time 
     
-    print(sliced_data)
+
 if __name__=="__main__":
 
     no_of_arguments = len(sys.argv)

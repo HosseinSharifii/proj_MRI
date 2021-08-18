@@ -12,5 +12,8 @@
     
     "projected_data":"../demos/demo_1/proj_mice_data.xlsx",
     "animals_to_pick":[502,504],
-    "frequency_in_days": 21
+    "frequency_in_days": 21,
+    "max_scan_reps":5,
+    "max_animals_per_day":4,
+    "scan_days": ["Mon","Tue","Thu","Fri"]
 }
