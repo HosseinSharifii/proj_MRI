@@ -8,7 +8,7 @@ import os
 import json
 import sys 
 import calendar as cal
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 import pandas as pd
 import numpy as np 
@@ -126,26 +126,38 @@ def project_MRI_scanning(instruction_str=""):
   
     # now generate counters for scan days in the calendar
     cal_count_dict = dict()
-    for i,m in enumerate(months[1:13]):
-        #print((i,m))
-        n_of_weeks = len(cal.monthcalendar(2021,i+1))
-        cal_count_dict[m]=np.zeros((n_of_weeks,7))
-        
-        for w in np.arange(len(cal_count_dict[m])):
-            for d in np.arange(len(cal_count_dict[m][w])):
-                if d in sd_index and cal.monthcalendar(2021,i+1)[w][d]!=0:
-                    cal_count_dict[m][w][d] = instruction['max_animals_per_day']
+    # first get the current date and start generating the calendar for  
+    # this year + 2 years later
+    today = date.today()
+    start_year = today.year 
+    for y in range(start_year,start_year+3):
+        cal_count_dict[y]=dict()
+        print(f'year:{y} and type is {type(y)}')
+    
 
+        for i,m in enumerate(months[1:13]):
+            #print((i,m))
+            n_of_weeks = len(cal.monthcalendar(y,i+1))
+            cal_count_dict[y][m]=np.zeros((n_of_weeks,7))
+            
+            for w in np.arange(len(cal_count_dict[y][m])):
+                for d in np.arange(len(cal_count_dict[y][m][w])):
+                    if d in sd_index and cal.monthcalendar(y,i+1)[w][d]!=0:
+                        cal_count_dict[y][m][w][d] = instruction['max_animals_per_day']
+
+    """for y in cal_count_dict.keys():
+        for month in cal_count_dict[y].keys():
+            m = np.where(months==month)[-1][-1]
+            print(cal.prmonth(y,m))
+            print('')
+            print(cal_count_dict[y][month])"""
+    
     # generate output dataframe 
     output_df = sliced_data.loc[sliced_data['redcap_repeat_instrument'].isna()]
     output_df = output_df[['mouse_date_of_birth']]
     output_df['ref_date'] = pd.Series()
     
-    """for k in cal_count_dict.keys():
-        m = np.where(months==k)[-1][-1]
-        print(cal.prmonth(2021,m))
-        print('')
-        print(cal_count_dict[k])"""
+    
     # start working with the projection
     # determine the existing data frame cols for scan dates
     scan_cols = np.zeros(instruction['max_scan_reps'])
@@ -201,10 +213,10 @@ def project_MRI_scanning(instruction_str=""):
                 d_index = cal.weekday(y,m,d)
                 month = months[m]
                 
-                if cal_count_dict[month][w][d_index]>0:
+                if cal_count_dict[y][month][w][d_index]>0:
                     output_df[next_scan_date_col].loc[id] = next_scan_date
                     selected_date += 1
-                    cal_count_dict[month][w][d_index] -= 1
+                    cal_count_dict[y][month][w][d_index] -= 1
                     output_df['ref_date'].loc[id] = next_scan_date
                     print(f'Projection {proj_number}: {next_scan_date}', flush=True)
                     
