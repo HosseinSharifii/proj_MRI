@@ -1,23 +1,26 @@
 {
-    "data_source":"redcap",
-    "redcap":
+    "pull_data":
     {
-        "api_key":"532C4251FCD057B38C48B04CF928E8E9",
-        "url_address":"https://redcap.uky.edu/redcap/api/"
+        "data_source":"redcap",
+        "redcap":
+        {
+            "api_key":"532C4251FCD057B38C48B04CF928E8E9",
+            "url_address":"https://redcap.uky.edu/redcap/api/"
+        },
+        "local_data":
+        {
+            "data_file_str":"../demos/demo_1/mice_list.csv"
+        },
+        "animals_col_name": "record_id",
+        "animals_to_pick":["all"]
     },
-    "local_data":
+    "projection_data":
     {
-        "data_file_str":"../demos/demo_1/mice_list.csv"
-    },
-    "keywords":
-    {
-        "animals_col_name": "record_id"
-    },
-    "projected_data_str":"../demos/demo_1/proj_mice_data.xlsx",
-    "animals_to_pick":["all"],
-    "frequency_in_days": 21,
-    "initial_scan_age_weeks":14,
-    "max_scan_reps":4,
-    "max_animals_per_day":4,
-    "scan_days": ["Mon","Tue","Thu","Fri"]
+        "initial_scan_age_weeks":14,
+        "frequency_in_days": 21,
+        "max_scan_reps":4,
+        "max_animals_per_day":4,
+        "scan_days": ["Mon","Tue","Thu","Fri"],
+        "output_proj_str": "../demos/demo_1/proj_mice_data.xlsx"
+    }
 }
