@@ -143,11 +143,15 @@ In the repository folder you can find three demos.
 
 2. demo_2 pulls data from [REDCap](https://www.project-redcap.org/) and generate the "projection" file for all animals.
 
+    - Run the code with following command: `$ python proj_MRI.py ../demos/demo_2/demo_2.json`
+
     - **Note**: Since no preference is assigned for "scan_days", **proj_MRI** uses all weekdays from Monday to Friday to assign to scannings. 
 
     ![demo_2](docs/images/demo_2.png)
 
 3. Similar to demo_2, demo_3 pulls data from [REDCap](https://www.project-redcap.org/) and generate the "projection" file for all animals.
+
+    - Run the code with following command: `$ python proj_MRI.py ../demos/demo_3/demo_3.json`
 
     - In addition to the projection file, **proj_MRI** determined which animals to scan for the specified date range in *demo_3.json* file. 
 
