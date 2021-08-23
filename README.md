@@ -1,5 +1,5 @@
 # proj_MRI: project timetable for MRI scanning
-=======================
+==============================================
 
 proj_MRI is a tool written in Python to help researchers to design a timetable for scannig a large number of animals. 
 
