@@ -7,7 +7,7 @@
             "data_file_str":"../demos/data/mice_list.csv"
         },
         "animals_col_name": "record_id",
-        "animals_to_pick":[504,505,506]
+        "animals_to_pick":[505,506,507,508,509]
     },
     "projection_data":
     {
@@ -15,7 +15,7 @@
         "frequency_in_days": 21,
         "max_scan_reps":4,
         "max_animals_per_day":4,
-        "scan_days": ["Mon","Tue","Thu","Fri"],
+        "scan_days": ["Mon","Thu"],
         "output_file_str": "../demos/demo_1/out_demo_1.xlsx"
-    } 
+    }
 }

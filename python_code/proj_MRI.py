@@ -79,8 +79,6 @@ def project_MRI_scanning(instruction_str=""):
 if __name__=="__main__":
 
     no_of_arguments = len(sys.argv)
-    print(no_of_arguments)
-    print(sys.argv[1])
 
     if no_of_arguments == 1:
         print('No instruction file has been called!')

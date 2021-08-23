@@ -31,7 +31,7 @@ def project_timetable(data_frame,
     # for calculating the projection
     
     for id in df.index.unique():
-        print('id is',id)
+        print('Animal:',id)
         if 'mri' in np.array(df['redcap_repeat_instrument'].loc[id]):
 
             last_scan_rep = df['redcap_repeat_instance'].loc[id].max()
@@ -94,13 +94,15 @@ def find_animals_to_scan(projected_df,instruction):
 
     pdf = projected_df 
     anim_to_scan = instruction['animals_to_scan']
+
     #handle date format 
     if not 'date_format' in anim_to_scan:
-            anim_to_scan['date_format'] = '%m/%d/%Y'
+        anim_to_scan['date_format'] = '%m/%d/%Y'
     format = anim_to_scan['date_format'] + ' ' + '%H:%M:%S.%f'
 
     # handle start date 
     if not 'from_date' in anim_to_scan:
+        print('bug')
         anim_to_scan['from_date'] = date.today()
     else:
         from_date = anim_to_scan['from_date'] + ' ' + '0:0:0.0'
