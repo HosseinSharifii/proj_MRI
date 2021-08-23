@@ -1,7 +1,7 @@
 # proj_MRI: project timetable for MRI scanning
 
 
-**proj_MRI** is a tool written in Python to help researchers to design a timetable for scannig a large number of animals. 
+**proj_MRI** is a tool written in Python to help researchers to design a timetable for MRI scannig a large number of animals. 
 
 Right now, the proj_MRI is designed for MMoTH group to predict the MRI scanning timetable at the University of Kentucky. 
 
@@ -146,3 +146,10 @@ In the repository folder you can find three demos.
     - **Note**: Since no preference is assigned for "scan_days", **proj_MRI** uses all weekdays from Monday to Friday to assign to scannings. 
 
     ![demo_2](docs/images/demo_2.png)
+
+3. Similar to demo_2, demo_3 pulls data from [REDCap](https://www.project-redcap.org/) and generate the "projection" file for all animals.
+
+    - In addition to the projection file, **proj_MRI** determined which animals to scan for the specified date range in *demo_3.json* file. 
+
+    ![demo_3](docs/images/demo_3_animals.png)
+    

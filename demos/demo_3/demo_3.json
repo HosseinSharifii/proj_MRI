@@ -1,0 +1,28 @@
+{
+    "pull_data":
+    {
+        "data_source":"redcap",
+        "redcap":
+        {
+            "api_key":"532C4251FCD057B38C48B04CF928E8E9",
+            "url_address":"https://redcap.uky.edu/redcap/api/"
+        },
+        "animals_col_name": "record_id",
+        "animals_to_pick":["all"]
+    },
+    "projection_data":
+    {
+        "initial_scan_age_weeks":14,
+        "frequency_in_days": 21,
+        "max_scan_reps":4,
+        "max_animals_per_day":4,
+        "scan_days": ["Mon","Tue","Thu","Fri"],
+        "output_file_str": "../demos/demo_3/out_demo_3.xlsx"
+    },
+    "animals_to_scan":
+    {
+        "from_date":"8/23/2021",
+        "to_date":"9/3/2021",
+        "output_file_str": "../demos/demo_3/animals_to_scan.xlsx"
+    } 
+}
