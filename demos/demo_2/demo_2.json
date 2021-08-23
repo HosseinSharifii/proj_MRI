@@ -16,7 +16,6 @@
         "frequency_in_days": 21,
         "max_scan_reps":4,
         "max_animals_per_day":4,
-        "scan_days": ["Mon","Tue","Thu","Fri"],
         "output_file_str": "../demos/demo_2/out_demo_2.xlsx"
     } 
 }

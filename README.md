@@ -139,5 +139,10 @@ In the repository folder you can find three demos.
 
     ![demo_1](docs/images/demo_1.png)
 
-    - **Note**: Since the Monday and Thursday are selected as the preffered days for scanning, all projections for this demo are in these two weekdays. 
+    - **Note**: Since Monday and Thursday are selected as the preffered days for scanning, all projections for this demo are in these two weekdays. 
 
+2. demo_2 pulls data from [REDCap](https://www.project-redcap.org/) and generate the "projection" file for all animals.
+
+    - **Note**: Since no preference is assigned for "scan_days", **proj_MRI** uses all weekdays from Monday to Friday to assign to scannings. 
+
+    ![demo_2](docs/images/demo_2.png)
