@@ -21,6 +21,13 @@
         "max_scan_reps":4,
         "max_animals_per_day":4,
         "scan_days": ["Mon","Tue","Thu","Fri"],
-        "output_proj_str": "../demos/demo_1/proj_mice_data.xlsx"
+        "output_file_str": "../demos/demo_1/proj_mice_data.xlsx"
+    },
+    "animals_to_scan":
+    {
+        "from_date":"8/25/2021",
+        "to_date":"09/30/2021",
+        "output_file_str": "../demos/demo_1/animals_to_scan.xlsx"
     }
+    
 }

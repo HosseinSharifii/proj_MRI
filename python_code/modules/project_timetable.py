@@ -1,9 +1,19 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Aug 16 21:34:31 2021
 
+@author: Hossein Sharifi
+"""
+
+import os
 import pandas as pd 
 import numpy as np
 import calendar as cal
 
-from datetime import timedelta
+from datetime import date, timedelta
+from datetime import datetime as dt 
+
+from modules.libraries import generate_counter_calendar as gcc
 
 def project_timetable(data_frame,
                     instruction,
@@ -76,19 +86,77 @@ def project_timetable(data_frame,
     # now remove the ref_date col from the output data frame 
     output_df = output_df.drop(columns='ref_date')
     
-    if 'output_proj_str' in instruction:
-        output_file_str = instruction['output_proj_str']
-        format = output_file_str.split('/')[-1].split('.')[-1]
-        if format == 'xlsx':
-            output_df.to_excel(output_file_str)
-        elif format == 'csv':
-            output_df.to_csv(output_file_str)
-        print(f'Projection spread sheet is saved to {output_file_str}')
-
+    if 'output_file_str' in instruction:
+        save_output_file(output_df,instruction['output_file_str'])
     return output_df
-    
+
+def find_animals_to_scan(projected_df,instruction):
+
+    pdf = projected_df 
+    anim_to_scan = instruction['animals_to_scan']
+    #handle date format 
+    if not 'date_format' in anim_to_scan:
+            anim_to_scan['date_format'] = '%m/%d/%Y'
+    format = anim_to_scan['date_format'] + ' ' + '%H:%M:%S.%f'
+
+    # handle start date 
+    if not 'from_date' in anim_to_scan:
+        anim_to_scan['from_date'] = date.today()
+    else:
+        from_date = anim_to_scan['from_date'] + ' ' + '0:0:0.0'
+        anim_to_scan['from_date'] = \
+            dt.strptime(from_date, format).date()
+
+    # handle end date
+    if not 'to_date' in anim_to_scan:
+        anim_to_scan['to_date'] = anim_to_scan['from_date']
+    else: 
+        to_date = anim_to_scan['to_date'] + ' ' + '0:0:0.0'
+        anim_to_scan['to_date'] = \
+            dt.strptime(to_date, format).date()
+
+
+    anim_to_scan_df = pd.DataFrame()
+    day = anim_to_scan['from_date']
+    delta = timedelta(days=1)
+
+    while anim_to_scan['from_date'] <= day and day <= anim_to_scan['to_date']:
+
+        animals = []
+        for c in pdf.columns:
+            if '_' in c and c.split('_')[0] == 'projection':
+                if day in pdf[c].to_list():
+                    animals = pdf.loc[pdf[c]==day].index.to_list()
+                    day_arr = [day for a in range(len(animals))]
+                    temp_df = pd.DataFrame({'animals_id':animals},index=day_arr)
+                    anim_to_scan_df = anim_to_scan_df.append(temp_df)
+        day += delta
+
+    if 'output_file_str' in anim_to_scan:
+        save_output_file(anim_to_scan_df,anim_to_scan['output_file_str'])
+        
+
+    return anim_to_scan_df
+
 def get_week_of_month(year, month, day):
     x = np.array(cal.monthcalendar(year, month))
     week_of_month = np.where(x==day)[0][0] 
 
     return week_of_month
+
+def save_output_file(data_frame,output_file_str):
+
+    # Make sure the path exists
+    output_dir = os.path.dirname(output_file_str)
+    print('output_dir %s' % output_dir)
+    if not os.path.isdir(output_dir):
+        print('Making output dir')
+        os.makedirs(output_dir)
+
+    format = output_file_str.split('/')[-1].split('.')[-1]
+    if format == 'xlsx':
+        data_frame.to_excel(output_file_str)
+    elif format == 'csv':
+        data_frame.to_csv(output_file_str)
+
+    print(f'Writing data to: {output_file_str}')

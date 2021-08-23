@@ -4,17 +4,16 @@ Created on Mon Aug 16 21:34:31 2021
 
 @author: Hossein Sharifi
 """
-import os 
+
 import json
 import sys 
-from datetime import date, timedelta
 
-import pandas as pd
 import numpy as np 
 import calendar as cal
 
 from modules.libraries import pull_data, generate_counter_calendar
 from modules.project_timetable import project_timetable as pt
+from modules.project_timetable import find_animals_to_scan as fas
 
 def project_MRI_scanning(instruction_str=""):
     """
@@ -53,11 +52,8 @@ def project_MRI_scanning(instruction_str=""):
         return
     df = pull_data(instruction['pull_data'])
     
-    #build the counter for calander
-
-    # first build up arrays for months, name of weekdays, and determine
-    # the indicies of scan days starting from 0 for Monday
-    months = np.array(cal.month_name)
+    
+    # generate counters for calendar
     weekdays = np.array(cal.day_abbr)
     if not 'scan_days' in instruction['projection_data']:
         instruction['projection_data']['scan_days'] = weekdays[0:4]
@@ -69,18 +65,15 @@ def project_MRI_scanning(instruction_str=""):
             instruction['projection_data']['scan_days'], 
             instruction['projection_data']['max_animals_per_day'])
 
-    """for y in count_cal_dict.keys():
-        for month in count_cal_dict[y].keys():
-            m = np.where(months==month)[-1][-1]
-            print(cal.prmonth(y,m))
-            print('')
-            print(count_cal_dict[y][month])"""
-    
-    pt(df, instruction['projection_data'],
+    # project scan dates
+    output_df = pt(df, instruction['projection_data'],
                     count_cal_dict)
     
 
-    #start checking when was the last time 
+    if 'animals_to_scan' in instruction: 
+        fas(output_df, instruction)
+
+        
 
 
 if __name__=="__main__":
@@ -98,3 +91,9 @@ if __name__=="__main__":
         project_MRI_scanning(instruction_str=sys.argv[1])
     
   
+    """for y in count_cal_dict.keys():
+            for month in count_cal_dict[y].keys():
+                m = np.where(months==month)[-1][-1]
+                print(cal.prmonth(y,m))
+                print('')
+                print(count_cal_dict[y][month])"""
