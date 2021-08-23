@@ -136,8 +136,8 @@ In the repository folder you can find three demos.
     - Run the code with following command: `$ python proj_MRI.py ../demos/demo_1/demo_1.json`
 
     - Output "projection" file should be stored in *demo_1* folder and it should look like this. 
-    
-    ![demo_1]((docs/images/demo_1.PNG))
+
+    ![demo_1](docs/images/demo_1.PNG)
 
     - **Note**: Since the Monday and Thursday are selected as the preffered days for scanning, all projections for this demo are in these two weekdays. 
 
