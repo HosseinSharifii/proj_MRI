@@ -137,7 +137,7 @@ In the repository folder you can find three demos.
 
     - Output "projection" file should be stored in *demo_1* folder and it should look like this. 
 
-    ![demo_1](docs/images/demo_1.PNG)
+    ![demo_1](docs/images/demo_1.png)
 
     - **Note**: Since the Monday and Thursday are selected as the preffered days for scanning, all projections for this demo are in these two weekdays. 
 
