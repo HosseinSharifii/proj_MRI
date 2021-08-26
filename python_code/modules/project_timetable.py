@@ -22,7 +22,8 @@ def project_timetable(data_frame,
     # generate output dataframe 
     df = data_frame
     output_df = df.loc[df['redcap_repeat_instrument'].isna()]
-    output_df = output_df[['mouse_date_of_birth']]
+    output_df = \
+        output_df[['mouse_date_of_birth','mouse_sex', 'mouse_genotype','mouse_notes']]
     output_df['ref_date'] = pd.Series()
     
     count_cal_dict = counter_calendar
@@ -85,7 +86,20 @@ def project_timetable(data_frame,
 
     # now remove the ref_date col from the output data frame 
     output_df = output_df.drop(columns='ref_date')
-    
+    # label the mice sex anf genotype according to the protocol
+    for s in [1,2]:
+        if s == 1:
+            sex_type = 'male'
+        elif s == 2:
+            sex_type = 'female'
+        output_df['mouse_sex'].loc[output_df['mouse_sex']==s] = sex_type
+    for g in [1,2]:
+        if g == 1:
+            genotype = 'R403Q'
+        elif g == 2:
+            genotype = 'Null'
+        output_df['mouse_genotype'].loc[output_df['mouse_genotype']==g] = genotype
+
     if 'output_file_str' in instruction:
         save_output_file(output_df,instruction['output_file_str'])
     return output_df

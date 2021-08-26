@@ -78,7 +78,7 @@ def pull_data(pull_data_dict):
 
     if pull_data_dict['animals_to_pick'][0] != 'all':
         sliced_data = sliced_data.loc[pull_data_dict['animals_to_pick']]
-
+    print(sliced_data)
     return sliced_data
 
 def generate_counter_calendar(scan_days, animal_rep_per_session):

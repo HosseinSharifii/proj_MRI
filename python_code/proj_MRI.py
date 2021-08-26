@@ -21,13 +21,8 @@ def project_MRI_scanning(instruction_str=""):
 
     Parameters
     ----------
-    data_file_string : str, optional
-        Path to the data file. The default is "".
     instruction_str : str, optional
         Path to the .json instruction file. The default is "".
-    projection_out_str : str, optional
-        Path where the output projection is saved. The default is "".
-    
 
     Returns
     -------
