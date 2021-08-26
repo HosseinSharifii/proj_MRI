@@ -19,23 +19,10 @@ To clone the repository:
 
 ## Dependencies
 
-**proj_MRI** uses following python modules:
-1. [os](https://docs.python.org/3/library/os.html)
-2. [JSON](https://docs.python.org/3/library/json.html)
-3. [sys](https://docs.python.org/3/library/sys.html)
-4. [NumPy](https://numpy.org/)
-5. [pandas](https://pandas.pydata.org/)
-6. [datetime](https://docs.python.org/3/library/datetime.html)
-7. [calendar](https://docs.python.org/3/library/calendar.html)
-8. [PyCap](https://pycap.readthedocs.io/en/latest/index.html)
-
-- Usually, the first 7 modules are included in [anaconda](https://www.anaconda.com/) environment and thus you don't need to install them again. 
-
-- [PyCap](https://pycap.readthedocs.io/en/latest/index.html) modules is the only one you need to manually install on your computer. To do that use [pip](https://pypi.org/project/pip/) command:
-
-`$ pip install PyCap`
-
-- [PyCap](https://pycap.readthedocs.io/en/latest/index.html) is an interface to the [REDCap](https://www.project-redcap.org/) Application Programming Interface (API).
+To satisfy all dependencies of **proj_MRI**:
+1. In terminal prompt, navigate to **proj_MRI** repository folder. 
+2. Run the following command:
+`$ pip install -r requirements.txt`
 
 ## Documentation
 
