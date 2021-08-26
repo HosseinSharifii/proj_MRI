@@ -28,6 +28,5 @@
         "from_date":"8/25/2021",
         "to_date":"09/30/2021",
         "output_file_str": "../demos/demo_1/animals_to_scan.xlsx"
-    }
-    
+    } 
 }
