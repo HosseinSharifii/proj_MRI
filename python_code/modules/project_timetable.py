@@ -86,6 +86,27 @@ def project_timetable(data_frame,
 
     # now remove the ref_date col from the output data frame 
     output_df = output_df.drop(columns='ref_date')
+
+    # sort projections columns
+    proj_nums=[]
+    other_cols=[]
+    cols = output_df.columns
+    for c in cols:
+        if 'projection' in c:
+            proj_nums.append(c.split('_')[-1])
+        else:
+            other_cols.append(c)
+    proj_nums.sort(key=int)       
+    new_cols = other_cols
+    for n in proj_nums:
+        output_df['age_p_'+n] = pd.Series()
+        output_df['age_p_'+n] = \
+            (output_df['projection_'+n] - output_df['mouse_date_of_birth'])/7
+        
+        new_cols.append('projection_'+n) 
+        new_cols.append('age_p_'+n) 
+
+    output_df = output_df[new_cols]
     # label the mice sex anf genotype according to the protocol
     for s in [1,2]:
         if s == 1:

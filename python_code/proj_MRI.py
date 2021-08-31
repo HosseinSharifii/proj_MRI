@@ -14,6 +14,7 @@ import calendar as cal
 from modules.libraries import pull_data, generate_counter_calendar
 from modules.project_timetable import project_timetable as pt
 from modules.project_timetable import find_animals_to_scan as fas
+from modules.project_timetable import save_output_file as sof
 
 def project_MRI_scanning(instruction_str=""):
     """
@@ -46,7 +47,6 @@ def project_MRI_scanning(instruction_str=""):
         print('Informtion for pulling data is not provided.')
         return
     df = pull_data(instruction['pull_data'])
-    
     
     # generate counters for calendar
     weekdays = np.array(cal.day_abbr)

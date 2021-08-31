@@ -4,11 +4,13 @@ Created on Mon Aug 16 21:34:31 2021
 
 @author: Hossein Sharifi
 """
+import os
 import pandas as pd
 import numpy as np 
 import calendar as cal
 
 from datetime import date, timedelta
+
 
 def pull_data(pull_data_dict):
 
@@ -70,6 +72,8 @@ def pull_data(pull_data_dict):
     if not 'animals_to_pick' in pull_data_dict:
         pull_data_dict['animals_to_pick'] = ['all']
 
+    if 'export_redcap_raw_data' in pull_data_dict:
+        save_output_file(df,pull_data_dict['export_redcap_raw_data'])
     # slice data according to the selected animals
     sliced_data=\
         df.loc[((df['redcap_repeat_instrument'].isnull())|(df['redcap_repeat_instrument']=='mri'))]
@@ -111,3 +115,20 @@ def generate_counter_calendar(scan_days, animal_rep_per_session):
                         count_cal_dict[y][m][w][d] = animal_rep_per_session
     
     return count_cal_dict
+
+def save_output_file(data_frame,output_file_str):
+
+    # Make sure the path exists
+    output_dir = os.path.dirname(output_file_str)
+    print('output_dir %s' % output_dir)
+    if not os.path.isdir(output_dir):
+        print('Making output dir')
+        os.makedirs(output_dir)
+
+    format = output_file_str.split('/')[-1].split('.')[-1]
+    if format == 'xlsx':
+        data_frame.to_excel(output_file_str)
+    elif format == 'csv':
+        data_frame.to_csv(output_file_str)
+
+    print(f'Writing data to: {output_file_str}')
