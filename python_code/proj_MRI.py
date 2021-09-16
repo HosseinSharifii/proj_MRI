@@ -68,8 +68,6 @@ def project_MRI_scanning(instruction_str=""):
     if 'animals_to_scan' in instruction: 
         fas(output_df, instruction)
 
-        
-
 
 if __name__=="__main__":
 
@@ -83,10 +81,3 @@ if __name__=="__main__":
         print(sys.argv[1])
         project_MRI_scanning(instruction_str=sys.argv[1])
     
-  
-    """for y in count_cal_dict.keys():
-            for month in count_cal_dict[y].keys():
-                m = np.where(months==month)[-1][-1]
-                print(cal.prmonth(y,m))
-                print('')
-                print(count_cal_dict[y][month])"""

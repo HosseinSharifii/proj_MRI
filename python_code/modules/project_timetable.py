@@ -19,6 +19,27 @@ def project_timetable(data_frame,
                     instruction,
                     counter_calendar):
 
+
+    """
+    Poject the scanning timetable.
+
+    Parameters
+    ----------
+    data_frame : pandas DataFrame, 
+        A data frame that holds all data from pulled data.
+    instruction: dict,
+        A dictionary file that holds all required inputs for projecting 
+        the time table.
+    counter_calendar: dict,
+         A dictionary yof counters that based on calendar.
+
+    Returns
+    -------
+    output_df : pandas DataFrame
+        A data frame that contains the projected time table.
+  
+    """
+
     # generate output dataframe 
     df = data_frame
     output_df = df.loc[df['redcap_repeat_instrument'].isna()]
@@ -57,8 +78,17 @@ def project_timetable(data_frame,
                     timedelta(days = instruction['frequency_in_days'])
                 next_scan_date_col = 'projection_' + proj_number
 
+            # if the potential next scan day is a weekday
+            # then set it to monday of that week
+            y = next_scan_date.year
+            m = next_scan_date.month
+            d = next_scan_date.day
+            d_index = cal.weekday(y,m,d)
+
+            if d_index <=5 and d_index>=0:
+                next_scan_date = next_scan_date - timedelta(days=d_index)
+
             if not next_scan_date_col in output_df.columns:
-                #print(f'col {next_scan_date_col} is added to dataframe')
                 output_df[next_scan_date_col] = pd.Series()
 
             remained_scans -= 1
@@ -73,6 +103,7 @@ def project_timetable(data_frame,
 
                 d_index = cal.weekday(y,m,d)
                 month = np.array(cal.month_name)[m]
+                
                 
                 if count_cal_dict[y][month][w][d_index]>0:
                     output_df[next_scan_date_col].loc[id] = next_scan_date
@@ -126,7 +157,23 @@ def project_timetable(data_frame,
     return output_df
 
 def find_animals_to_scan(projected_df,instruction):
+    """
+    Find out which animals to scan in the specified range of date.
 
+    Parameters
+    ----------
+    projected_df : pandas DataFrame, 
+        A data frame that contains the projected time table.
+    instruction: dict,
+        A dictionary file that holds all required inputs for projecting 
+        the time table.
+
+    Returns
+    -------
+    anim_to_scan_df : pandas DataFrame
+        A data frame that contains animals to scan for the specified date range.
+  
+    """
     pdf = projected_df 
     anim_to_scan = instruction['animals_to_scan']
 

@@ -14,6 +14,21 @@ from datetime import date, timedelta
 
 def pull_data(pull_data_dict):
 
+    """
+    Pull data to start make the scanning projection.
+
+    Parameters
+    ----------
+    pull_data_dict : dict, 
+        A dictionary of inputs that are required to pull data.
+
+    Returns
+    -------
+    sliced_data : data spread sheet 
+        A format of data that is ready to be used for scanning projection.
+  
+    """
+
 # handle data
     if not 'data_source' in pull_data_dict:
         pull_data_dict['data_source']='redcap'
@@ -82,11 +97,26 @@ def pull_data(pull_data_dict):
 
     if pull_data_dict['animals_to_pick'][0] != 'all':
         sliced_data = sliced_data.loc[pull_data_dict['animals_to_pick']]
-    print(sliced_data)
+
     return sliced_data
 
 def generate_counter_calendar(scan_days, animal_rep_per_session):
+     """
+    Generate a calendar of counters based on 
+    scanning days and number of animals per session.
 
+    Parameters
+    ----------
+    scan_days : list 
+        An array of weekdays that scanning can be obtained.
+    animal_rep_per_session : int
+        Maximum number of animals to scan at each session of scanning. 
+    Returns
+    -------
+    count_cal_dict : dict
+        A dictionary yof counters that based on calendar.
+  
+    """
     months = np.array(cal.month_name)
     weekdays = np.array(cal.day_abbr)
     sd_index = np.zeros(len(scan_days))
