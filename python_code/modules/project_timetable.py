@@ -57,25 +57,35 @@ def project_timetable(data_frame,
         if 'mri' in np.array(df['redcap_repeat_instrument'].loc[id]):
 
             last_scan_rep = df['redcap_repeat_instance'].loc[id].max()
+            #output_df['ref_date'].loc[id] = \
+            #    df['mri_date'].loc[(df['redcap_repeat_instance']==last_scan_rep)&\
+            #        (df.index==id)].to_list()[0]
+            time_delta_days = instruction['initial_scan_age_weeks']*7 + \
+                (last_scan_rep-1)*instruction['frequency_in_days']
+            
             output_df['ref_date'].loc[id] = \
-                df['mri_date'].loc[(df['redcap_repeat_instance']==last_scan_rep)&\
-                    (df.index==id)].to_list()[0]
+                output_df['mouse_date_of_birth'].loc[id] + timedelta(days = time_delta_days)
             remained_scans = instruction['max_scan_reps'] - last_scan_rep
         else:
-            output_df['ref_date'].loc[id] = df['mouse_date_of_birth'].loc[id]
+            output_df['ref_date'].loc[id] = output_df['mouse_date_of_birth'].loc[id]
             remained_scans = instruction['max_scan_reps']
 
-        
         while remained_scans > 0:
             proj_number = str(int(instruction['max_scan_reps']-remained_scans+1))
-            if output_df['ref_date'].loc[id] == output_df['mouse_date_of_birth'].loc[id]:
+            print('ref:',output_df['ref_date'].loc[id])
+            # handle supposed ages in weeks
+            if int(proj_number) == 1:
+                supposed_age = instruction['initial_scan_age_weeks']
                 next_scan_date = output_df['ref_date'].loc[id]+\
-                    timedelta(days = instruction['initial_scan_age_weeks']*7)
+                        timedelta(days = instruction['initial_scan_age_weeks']*7)
+
                 next_scan_date_col = 'projection_1'
-                
-            else:
+            else: 
+                supposed_age = instruction['initial_scan_age_weeks'] + \
+                    (int(proj_number)-1)*instruction['frequency_in_days']/7
                 next_scan_date = output_df['ref_date'].loc[id]+\
-                    timedelta(days = instruction['frequency_in_days'])
+                        timedelta(days = instruction['frequency_in_days'])
+
                 next_scan_date_col = 'projection_' + proj_number
 
             # if the potential next scan day is a weekday
@@ -85,8 +95,16 @@ def project_timetable(data_frame,
             d = next_scan_date.day
             d_index = cal.weekday(y,m,d)
 
+            # start from Monday of the same week for next_scan_date
             if d_index <=5 and d_index>=0:
                 next_scan_date = next_scan_date - timedelta(days=d_index)
+            
+            # manually impose scanning starting date, if any
+            if 'starting_date' in instruction:
+                if  next_scan_date < return_date_format(instruction['starting_date']):
+                    print('starting date is applied')
+                    next_scan_date = \
+                        return_date_format(instruction['starting_date'])
 
             if not next_scan_date_col in output_df.columns:
                 output_df[next_scan_date_col] = pd.Series()
@@ -106,11 +124,27 @@ def project_timetable(data_frame,
                 
                 
                 if count_cal_dict[y][month][w][d_index]>0:
-                    output_df[next_scan_date_col].loc[id] = next_scan_date
-                    selected_date += 1
-                    count_cal_dict[y][month][w][d_index] -= 1
-                    output_df['ref_date'].loc[id] = next_scan_date
-                    print(f'Projection {proj_number}: {next_scan_date}', flush=True)
+                    # check the age of animal at this date
+                    # if the age is 1 week or more older than 
+                    # supped age, then skip this scanning and go for next one
+                    age = (next_scan_date - output_df['mouse_date_of_birth'].loc[id]).days/7
+                    if not 'age_buffer_to_skip' in instruction:
+                        instruction['age_buffer_to_skip'] = 1
+                    if age - supposed_age > instruction['age_buffer_to_skip']:
+                        #output_df[next_scan_date_col].loc[id] = 'skipped'
+                        selected_date += 1
+                        
+                    else:
+                        output_df[next_scan_date_col].loc[id] = next_scan_date
+                        selected_date += 1
+                        count_cal_dict[y][month][w][d_index] -= 1
+                        #output_df['ref_date'].loc[id] = next_scan_date
+                        print(f'Projection {proj_number}: {next_scan_date}', flush=True)
+
+                    output_df['ref_date'].loc[id] = \
+                            output_df['mouse_date_of_birth'].loc[id]+\
+                                timedelta(days = supposed_age*7)
+                        
                     
                 else:
                     next_scan_date += timedelta(days=1)
@@ -228,6 +262,13 @@ def get_week_of_month(year, month, day):
 
     return week_of_month
 
+def return_date_format(date_str):
+   
+    format = '%m/%d/%Y' + ' ' + '%H:%M:%S.%f'
+    date_str = date_str + ' ' + '0:0:0.0'
+    date = dt.strptime(date_str, format).date()
+
+    return date
 def save_output_file(data_frame,output_file_str):
 
     # Make sure the path exists

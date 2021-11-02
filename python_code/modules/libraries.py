@@ -101,7 +101,7 @@ def pull_data(pull_data_dict):
     return sliced_data
 
 def generate_counter_calendar(scan_days, animal_rep_per_session):
-     """
+    """
     Generate a calendar of counters based on 
     scanning days and number of animals per session.
 
